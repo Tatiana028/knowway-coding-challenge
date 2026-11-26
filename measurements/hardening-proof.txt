@@ -1,0 +1,14 @@
+Before: postgres exposed on host port 5432.
+After:  postgres only reachable from the internal Docker network.
+
+- API still works through proxy:
+  curl http://localhost:8080/healthz
+  -> {"status": "ok"}
+
+- postgres no longer reachable from host:
+  nc -zv localhost 5432
+  -> Connection refused
+
+- api-2 can still talk to postgres:
+  docker logs api-2 --tail 3
+  -> listening on :8000, db host postgres  
