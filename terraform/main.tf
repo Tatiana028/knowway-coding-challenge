@@ -38,7 +38,16 @@ resource "docker_image" "api" {
   }
 }
 
+resource "docker_volume" "postgres_data" {
+  name = "postgres_data"
+}
+
 resource "docker_container" "postgres" {
+
+  volumes {
+  volume_name    = docker_volume.postgres_data.name
+  container_path = "/var/lib/postgresql"
+  }
 
   name  = "postgres"
   image = docker_image.postgres.image_id

@@ -1,0 +1,21 @@
+1. POST a record:
+     curl -X POST http://localhost:8080/runs \
+          -H 'Content-Type: application/json' \
+          -d '{"agent": "survivor"}'
+     -> id = 1
+
+  2. Recreate the postgres container:
+     tofu apply -replace=docker_container.postgres 
+
+  3. Query after recreation:
+     curl http://localhost:8080/runs
+     -> record with id=1 is still there.
+
+    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   125  100   125    0     0   2333      0 --:--:-- --:--:-- --:--:--  2358
+[{"id": 1, "agent": "survivor", "status": "completed", "duration_ms": 777, "created_at": "2026-11-26 15:07:03.548049+00:00"}]%   
+
+
+
+Data survived 
