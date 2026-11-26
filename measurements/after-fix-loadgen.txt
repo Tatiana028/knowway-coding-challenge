@@ -1,0 +1,5 @@
+requests:    200 in 0.9s (232 req/s)
+status 200:   100 (50.0%)
+status 201:   100 (50.0%)
+latency p50: 13 ms
+latency p95: 32 ms

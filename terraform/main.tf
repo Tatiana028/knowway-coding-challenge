@@ -83,7 +83,7 @@ resource "docker_container" "api_2" {
   image = docker_image.api.image_id
 
   env = [
-    "DB_HOST=postgrse",
+    "DB_HOST=postgres",
     "DB_PORT=5432",
     "DB_NAME=runs",
     "DB_USER=app",
