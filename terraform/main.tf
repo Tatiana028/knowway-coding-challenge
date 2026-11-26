@@ -21,7 +21,7 @@ resource "docker_network" "internal" {
  
 
 resource "docker_image" "postgres" {
-  name         = "postgres:18.7-trixie"
+  name         = var.postgres_image
   keep_locally = true
 }
 
@@ -63,8 +63,8 @@ resource "docker_container" "postgres" {
 
   env = [
     "POSTGRES_USER=app",
-    "POSTGRES_PASSWORD=app",
-    "POSTGRES_DB=runs",
+    "POSTGRES_PASSWORD=${var.db_password}",
+    "POSTGRES_DB=${var.db_name}",
   ] 
  
 }
@@ -82,12 +82,12 @@ resource "docker_container" "api_1" {
   }
 
   env = [
-    "DB_HOST=postgres",
-    "DB_PORT=5432",
-    "DB_NAME=runs",
-    "DB_USER=app",
-    "DB_PASSWORD=app",
-  ] 
+  "DB_HOST=postgres",
+  "DB_PORT=5432",
+  "DB_NAME=${var.db_name}",
+  "DB_USER=app",
+  "DB_PASSWORD=${var.db_password}",
+  ]
 
   depends_on = [docker_container.postgres]
 }
@@ -105,11 +105,11 @@ resource "docker_container" "api_2" {
   }
 
   env = [
-    "DB_HOST=postgres",
-    "DB_PORT=5432",
-    "DB_NAME=runs",
-    "DB_USER=app",
-    "DB_PASSWORD=app",
+  "DB_HOST=postgres",
+  "DB_PORT=5432",
+  "DB_NAME=${var.db_name}",
+  "DB_USER=app",
+  "DB_PASSWORD=${var.db_password}",
   ]
  
 
@@ -126,7 +126,7 @@ resource "docker_container" "proxy" {
 
   ports {
     internal = 80
-    external = 8080
+    external = var.proxy_external_port
   }
 
   upload {
@@ -142,5 +142,5 @@ resource "docker_container" "proxy" {
 }
 
 output "proxy_url" {
-  value = "http://localhost:8080"
+  value = "http://localhost:${var.proxy_external_port}"
 }
